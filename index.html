@@ -1,0 +1,114 @@
+
+<style>
+html, body, button { font-family: "Courier New", Courier, monospace; font-size:90%;}
+
+main {
+   width:100%;
+   margin: 0 auto;
+   padding: 0;
+   border: 0px solid black;
+}
+#controls {
+   margin: 0;
+   padding: 0;
+   float:left;
+   width:34%;
+   border: 0px solid green;
+   overflow-y:scroll;
+   height:100%;
+}
+#display {
+   margin:0;
+   padding: 0;
+   float:right;
+   width:65%;
+   border: 0px solid blue;
+   white-space: nowrap;
+   text-align: center;
+   display: table; 
+}
+label { display:block; width:100%; text-align: right;}
+input[type=range] {width:75%; margin-left:5px;}
+input[type=number] {width:20%; margin-left:5px;}
+.choose { text-align:center;}
+#input_video {border: 0px solid blue; display: none;}
+#temp_canvas { border: 0px solid red; }
+#vc {   display: table-cell;
+   text-align: center;
+   vertical-align: middle; border: 0px solid green;}
+#out_canvas {border: 1px solid black;
+}
+/*canvas {margin: 0; padding:0;}*/
+#loglist{ height: 100px;  overflow-y:scroll; border: 1px solid lightgray;}
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+sup {font-size: 50%; font-weight: normal;}
+
+.uppercase {text-transform: uppercase;}
+</style>
+<header>
+  <h1>WEgifM - sthe ultimate gif/webm online editor <sup>by <a href="https://twitter.com/enzenhofer" target="_blank">franz enzenhofer</a></sup></h1>
+</header>
+<main>
+<div id="controls">
+  <input type="file" id="video_files">
+  <hr>
+  <center>
+    <div>Fps: <span id="fps">10</span> / Frame: <span id="frame_counter">0</span></div>
+  </center>
+  <hr>
+  <label>width<input type="range" id="video_width" min="10" max="200"  /> </label>
+  <label>height<input type="range" id="video_height" min="10" max="200"  /> </label>
+  <label class="choose"> ratio <input type="radio" value="yes" name="ratio" checked="checked" id="ratio_yes" > yes / <input type="radio" value="no" name="ratio" id="ratio_no"> no </label>
+  <hr>
+  <label >start<input type="range" id="video_start" step="1" min="0" max="99" value="0"  /><br>
+    <button class="start_plus_minus" value="-1000">-1s</button><button class="start_plus_minus" value="-100">-100ms</button><button class="start_plus_minus" value="-10" >-10ms</button><button class="start_plus_minus" value="-1" >-1ms</button><br>
+    <button class="start_plus_minus" value="1000">+1s</button><button class="start_plus_minus" value="100">+100ms</button><button class="start_plus_minus" value="10">+10ms</button><button class="start_plus_minus" value="1">+1ms</button><br>
+    <button class="test_start">test</button></label>
+  <hr>
+  <label>duration in ms (max 20 000ms = 20s)<input type="number" id="video_duration" value="10000" min="1" max="20000"><button id="video_duration_set">set</button><br>
+  <button class="video_duration_plus_minus" value="-1000">-1s</button><button class="video_duration_plus_minus" value="-100">-100ms</button><button class="video_duration_plus_minus" value="-10" >-10ms</button><button class="video_duration_plus_minus" value="-1" >-1ms</button><br>
+    <button class="video_duration_plus_minus" value="1000">+1s</button><button class="video_duration_plus_minus" value="100">+100ms</button><button class="video_duration_plus_minus" value="10">+10ms</button><button class="video_duration_plus_minus" value="1">+1ms</button><br>
+    <button class="test_start">test</button></label>
+  <!--<label>end<input type="range" id="video_end" step="0.01" min="0" max="100" value="100"  /></label>-->
+  <!--<label class="choose"> loop <input type="radio" value="yes" name="loop" checked="checked" id="loop_on"> on / <input type="radio" value="no" name="loop" id="loop_off"> off </label>-->
+  <hr>
+  <center>crop</center>
+  <label>left<input type="range" id="crop_left" min="0" max="50" value="0"   /></label>
+  <label>top<input type="range" id="crop_top" min="0" max="50" value="0"   /> </label>
+ <label>right<input type="range" id="crop_right" min="0" max="50" value="0"   /></label>
+ <label>bottom<input type="range" id="crop_bottom" min="0" max="50" value="0"   /></label>
+
+    <hr>
+    <label>frames per second (1 to 30)<input type="number" id="framerate" min="1" max="30" value="10" ><button id="set_framerate">set</button></label>
+
+  <hr>
+   <label>text (top) <input type="text" id="text_top" class="uppercase" value="top"></label>
+   <label>text (bottom) <input type="text" id="text_bottom" class="uppercase" value="bottom"></label>
+    <label>font-size<input type="number" id="fontsize" min="1" max="250" value="34" ><button id="set_fontsize">set</button></label>
+    <hr>
+  <label><button id="make_gif">make gif</button> <button id="make_webm">make webm</button></label>
+  <hr>
+  <ul id="loglist"><li>log</li></ul>
+</div>
+<div id="display">
+<center>
+  <div id="vc"><canvas id="out_canvas" width="400px" height="200px"></canvas></div>
+  <video id="input_video" src="test.mp4" autoplay muted width="400px" height="200px"></video>
+</center>
+</div>
+</main>
+
+
+<script src="./bower_components/jquery/dist/jquery.js"></script>
+<script src="./bower_components/gif.js/dist/gif.js"></script>
+<script src="./js/whammy/whammy.js" ></script>
+<script src="./alpha.js"></script>
