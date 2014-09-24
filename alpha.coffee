@@ -72,12 +72,12 @@ v = $$('input_video')#document.createElement('video')
 tc = document.createElement('canvas')
 tcc = tc.getContext('2d')
 
-ec = document.createElement('canvas')
-ecc = ec.getContext('2d')
-
-
 oc = $$('out_canvas');
 occ = oc.getContext('2d')
+
+#font canvas
+ec = document.createElement('canvas')
+ecc = ec.getContext('2d')
 
 
 
@@ -113,8 +113,8 @@ fontDraw = () ->
   ecc.strokeText(_text_.bottomstring, oc.width/2, oc.height-5)
 
 tempDrawing = (i, o) ->
-  o.canvas.width = v.width - cropWidthOffset(_crop_left_) - cropWidthOffset(_crop_right_)
-  o.canvas.height = v.height - cropHeightOffset(_crop_top_) - cropWidthOffset(_crop_bottom_)
+  o.canvas.width = i.width - cropWidthOffset(_crop_left_) - cropWidthOffset(_crop_right_)
+  o.canvas.height = i.height - cropHeightOffset(_crop_top_) - cropWidthOffset(_crop_bottom_)
   o.drawImage(i, cropWidthOffset(_crop_left_), cropHeightOffset(_crop_top_), i.width, i.height, 0, 0, i.width, i.height)
   #o.drawImage(fc,0,0)
 
@@ -194,7 +194,6 @@ v.addEventListener('loadedmetadata', () ->
 )
 
 v.addEventListener('playing', () -> 
-  #console.log('playing')
   _video_is_playing_ = true
   drawingLoop(v, tcc)
 )
@@ -228,6 +227,7 @@ customEnded = () ->
   if _make_gif_now_ is true
     _make_gif_now_ = false
     _GIF_.render()
+    #cleanVtcArray()
   if _make_webm_now_ is true
     _make_webm_now_ = false
     finishWebM()
@@ -413,6 +413,7 @@ makeGif = () ->
     log("<a href='"+url+"' target='blank' download='gifmachine.gif' >download gif</a>")
     log("size #{ (blob.size / 1000).toFixed 2 }kb")
     $dd('make_gif')
+    cleanVtcArray()
   )
   _make_gif_now_ = true
   customPlay(true)
@@ -436,6 +437,7 @@ finishWebM = () ->
   log("size #{ (blob.size / 1000).toFixed 2 }kb")
   _make_webm_now_ = false
   $dd('make_webm')
+  cleanVtcArray()
 
 
 $$('make_gif').addEventListener('click', () ->

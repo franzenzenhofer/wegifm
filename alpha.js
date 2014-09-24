@@ -121,13 +121,13 @@
 
   tcc = tc.getContext('2d');
 
-  ec = document.createElement('canvas');
-
-  ecc = ec.getContext('2d');
-
   oc = $$('out_canvas');
 
   occ = oc.getContext('2d');
+
+  ec = document.createElement('canvas');
+
+  ecc = ec.getContext('2d');
 
   drawingLoop = function(i, o) {
     return _global_drawing_loop_id_ = window.setInterval((function() {
@@ -156,8 +156,8 @@
   };
 
   tempDrawing = function(i, o) {
-    o.canvas.width = v.width - cropWidthOffset(_crop_left_) - cropWidthOffset(_crop_right_);
-    o.canvas.height = v.height - cropHeightOffset(_crop_top_) - cropWidthOffset(_crop_bottom_);
+    o.canvas.width = i.width - cropWidthOffset(_crop_left_) - cropWidthOffset(_crop_right_);
+    o.canvas.height = i.height - cropHeightOffset(_crop_top_) - cropWidthOffset(_crop_bottom_);
     return o.drawImage(i, cropWidthOffset(_crop_left_), cropHeightOffset(_crop_top_), i.width, i.height, 0, 0, i.width, i.height);
   };
 
@@ -482,7 +482,8 @@
       log("<a href='" + url + "' target='blank' >open gif in new tab</a>");
       log("<a href='" + url + "' target='blank' download='gifmachine.gif' >download gif</a>");
       log("size " + ((blob.size / 1000).toFixed(2)) + "kb");
-      return $dd('make_gif');
+      $dd('make_gif');
+      return cleanVtcArray();
     });
     _make_gif_now_ = true;
     return customPlay(true);
@@ -510,7 +511,8 @@
     log("<a href='" + url + "' target='blank' download='gifmachine.webm' >download webm</a>");
     log("size " + ((blob.size / 1000).toFixed(2)) + "kb");
     _make_webm_now_ = false;
-    return $dd('make_webm');
+    $dd('make_webm');
+    return cleanVtcArray();
   };
 
   $$('make_gif').addEventListener('click', function() {
